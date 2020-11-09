@@ -37,15 +37,15 @@ public class SpaceshipMove : MonoBehaviour
     //Corrutina que hace cambiar el texto de distancia
     IEnumerator Distancia()
     {
-        //Bucle infinito que suma 10 en cada ciclo
+        //Bucle infinito que suma 1 en cada ciclo
         //El segundo parámetro está vacío, por eso es infinito
-        for(int n = 0; ; n += 10)
+        for(int n = 0; ; n += 1)
         {
             //Cambio el texto que aparece en pantalla
             TextDistance.text = "DISTANCIA: " + n;
 
             //Ejecuto cada ciclo esperando 1 segundo
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(0.25f);
         }
         
     }
@@ -68,13 +68,32 @@ public class SpaceshipMove : MonoBehaviour
         */
         //Variable float que obtiene el valor del eje horizontal y vertical
         float desplX = Input.GetAxis("Horizontal");
-        float desplY = Input.GetAxis("Vertical");
+        //limitar movimiento en x
+        if (transform.position.x < -5f && desplX < 0f)
+        {
+            desplX = 0f;
+        }
+        else if (transform.position.x > 5f && desplX > 0f)
+        {
+            desplX = 0f;  
+        }
 
+        float desplY = Input.GetAxis("Vertical");
+        //limitar movimiento en y
+        if (transform.position.y < 0.1f && desplY < 0f)
+        {
+            desplY = 0f;
+        }
+        else if (transform.position.y > 4f && desplY >0f)
+        {
+            desplY = 0f;
+        }
         //Movemos la nave mediante el método transform.translate
         //Lo multiplicamos por deltaTime, el eje y la velocidad de movimiento la nave
         transform.Translate(Vector3.right * Time.deltaTime * moveSpeed * desplX);
         transform.Translate(Vector3.up * Time.deltaTime * moveSpeed * desplY);
 
+        
         
     }
 }

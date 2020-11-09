@@ -15,12 +15,24 @@ public class ObstacleCreator : MonoBehaviour
     //Variables para generar columnas de forma random
     private float randomNumber;
     Vector3 RandomPos;
-    
+    Vector3 InitCol;
     // Start is called before the first frame update
+   
     void Start()
     {
+            {//Para crear 15 columnas antes de las del instanciador. 
+            //En el repositorio de Álvaro hay otro método más sencillo, mirar
+            for (int i =1; i< 15; i++)
+                {
+                randomNumber = Random.Range(0f, 7f);
+                InitCol = new Vector3(randomNumber, 0, i*-5);
+                Vector3 newPosition = InitPos.position + InitCol;
+                Instantiate(Columna, newPosition, Quaternion.identity);
+                }
+             }
         //Lanzo la corrutina
         StartCoroutine("InstanciadorColumnas");
+    
 
     }
 
@@ -46,6 +58,7 @@ public class ObstacleCreator : MonoBehaviour
         }
 
     }
-
-
+   
 }
+
+

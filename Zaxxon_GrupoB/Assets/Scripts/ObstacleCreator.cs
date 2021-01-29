@@ -32,7 +32,7 @@ public class ObstacleCreator : MonoBehaviour
             //En el repositorio de Álvaro hay otro método más sencillo, mirar
             for (int i =1; i< 15; i++)
                 {
-                randomNumber = Random.Range(-5.5f, 7f);
+                randomNumber = Random.Range(-4.25f, 7f);
                 InitCol = new Vector3(randomNumber, 0, i*-5);
                 Vector3 newPosition = InitPos.position + InitCol;
                 Instantiate(Columna, newPosition, Quaternion.identity);
@@ -47,7 +47,7 @@ public class ObstacleCreator : MonoBehaviour
     //Función que crea una columna en una posición Random
     void CrearColumna()
     {
-        randomNumber = Random.Range(-5.5f, 7f);
+        randomNumber = Random.Range(-4.25f, 7f);
         RandomPos = new Vector3(randomNumber, 0, 0);
         //print(RandomPos);
         Vector3 FinalPos = InitPos.position + RandomPos;

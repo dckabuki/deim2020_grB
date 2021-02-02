@@ -6,6 +6,12 @@ using UnityEngine.UI; //Importante importar esta librería para usar la UI
 
 public class SpaceshipMove : MonoBehaviour
 {
+    //capturamos el canvas
+    public GameObject endCanvas;
+    //capturamos el script
+    private GameOver gameOver;
+
+
     //codigo para la colision. Ojo, el objeto tiene que tener un rigid body y los obstáculos is trigger activo
     [SerializeField] MeshRenderer myMesh;
     private void OnTriggerEnter(Collider other)
@@ -16,8 +22,20 @@ public class SpaceshipMove : MonoBehaviour
             //con este segmento paramos la corrutina y la velocidad
             StopCoroutine("Distancia");
             speed = 0f;
+            //llamamos al canvas a los 2 segundos de colisionar
+            Invoke("showCanvas", 2f);
+
+
+           
         }
     }
+
+    void showCanvas()
+    {
+        //activamos el canvas
+        endCanvas.SetActive(true);
+    }
+
     //--SCRIPT PARA MOVER LA NAVE --//
 
     //Variable PÚBLICA que indica la velocidad a la que se desplaza
@@ -35,7 +53,9 @@ public class SpaceshipMove : MonoBehaviour
     //Capturo el texto del UI que indicará la distancia recorrida
     [SerializeField] Text TextDistance;
     [SerializeField] Text TextSpeed;
-    
+    //capturamos el texto de score
+    [SerializeField] Text TextScore;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,7 +67,8 @@ public class SpaceshipMove : MonoBehaviour
 
         //asocio componente de audio
         audioSource = GetComponent<AudioSource>();
-      
+        //asociamos componente del canvas
+        gameOver = GetComponent<GameOver>();
 
 
     }
@@ -75,8 +96,11 @@ public class SpaceshipMove : MonoBehaviour
         //El segundo parámetro está vacío, por eso es infinito
         for(int n = 0; ; n += 1)
         {
+            float distance;
+            distance = n * speed; 
             //Cambio el texto que aparece en pantalla
-            TextDistance.text = "DISTANCIA: " + n * speed;
+            TextDistance.text = "DISTANCE: " + distance.ToString("F0");
+            TextScore.text = "SCORE = " + distance.ToString("F0") + " POINTS" ;
 
             //Con esto hacemos que la nave vaya aumentando velocidad
             if (speed < 20f)
@@ -90,9 +114,11 @@ public class SpaceshipMove : MonoBehaviour
 
     IEnumerator Speed()
     {
-        for (int s = 0; ; s += 5)
+        for (int s = 0; ; s += 6)
         {
-            TextSpeed.text = "SPEED:" + speed * 5f;
+            float completeSpeed;
+            completeSpeed = speed * 5f;
+            TextSpeed.text = "SPEED:" + completeSpeed.ToString("f0");
             yield return new WaitForSeconds(1f);
         }
     }
@@ -115,18 +141,18 @@ public class SpaceshipMove : MonoBehaviour
         //Variable float que obtiene el valor del eje horizontal y vertical
         float desplX = Input.GetAxis("Horizontal");
         //limitar movimiento en x
-        if (transform.position.x < -7f && desplX < 0f)
+        if (transform.position.x < -5f && desplX < 0f)
         {
             desplX = 0f;
         }
-        else if (transform.position.x > 4f && desplX > 0f)
+        else if (transform.position.x > 5f && desplX > 0f)
         {
             desplX = 0f;  
         }
 
         float desplY = Input.GetAxis("Vertical");
         //limitar movimiento en y
-        if (transform.position.y < 0.1f && desplY < 0f)
+        if (transform.position.y < 0.2f && desplY < 0f)
         {
             desplY = 0f;
         }
@@ -139,7 +165,7 @@ public class SpaceshipMove : MonoBehaviour
         transform.Translate(Vector3.right * Time.deltaTime * moveSpeed * desplX);
         transform.Translate(Vector3.up * Time.deltaTime * moveSpeed * desplY);
 
-        
-        
+        //rotacion (de Iris)
+        transform.rotation = Quaternion.Euler(0, 0, desplX * -20);
     }
 }

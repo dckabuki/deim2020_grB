@@ -28,20 +28,23 @@ public class ObstacleCreator : MonoBehaviour
         //Accedo al script de la nave
         spaceshipMove = Nave.GetComponent<SpaceshipMove>();
 
-        {//Para crear 15 columnas antes de las del instanciador. 
-            //En el repositorio de Álvaro hay otro método más sencillo, mirar
-            for (int i =1; i< 15; i++)
-                {
-                randomNumber = Random.Range(-4.25f, 7f);
-                InitCol = new Vector3(randomNumber, 0, i*-5);
-                Vector3 newPosition = InitPos.position + InitCol;
-                Instantiate(Columna, newPosition, Quaternion.identity);
-                }
-             }
+        ColumnasIniciales();
+        print("Lanzando corrutina");
         //Lanzo la corrutina
         StartCoroutine("InstanciadorColumnas");
-    
 
+    }
+
+    void ColumnasIniciales()
+    {//Para crear 15 columnas antes de las del instanciador. 
+     //En el repositorio de Álvaro hay otro método más sencillo, mirar
+        for (int i = 1; i < 15; i++)
+        {
+            randomNumber = Random.Range(-4.25f, 7f);
+            InitCol = new Vector3(randomNumber, 0, i * -5);
+            Vector3 newPosition = InitPos.position + InitCol;
+            Instantiate(Columna, newPosition, Quaternion.identity);
+        }
     }
 
     //Función que crea una columna en una posición Random
@@ -58,16 +61,28 @@ public class ObstacleCreator : MonoBehaviour
     //NOTA: habría que cambiar ese segundo por una variable que dependa de la velocidad
     IEnumerator InstanciadorColumnas()
     {
-        //Bucle infinito (poner esto es lo mismo que while(true){}
-        for (; ; )
+        
+        while( true )
         {
-            //para crear columnas. La velocidad de generación depende de la distancia entre columnas (4) y la velocidad de la nave
-            CrearColumna();
-            //la variable interval sirve para dar frecuencia a la corrutina
-            float interval = 4 / spaceshipMove.speed;
+            float interval = 1;
+            //Bucle infinito (poner esto es lo mismo que while(true){}
+            if (spaceshipMove.speed > 0)
+            {
+                //la variable interval sirve para dar frecuencia a la corrutina
+                interval = 4 / spaceshipMove.speed;
+                //para crear columnas. La velocidad de generación depende de la distancia entre columnas (4) y la velocidad de la nave
+                CrearColumna();
+
+            }
+            else
+            {
+                interval = 1;
+            }
+
+
             yield return new WaitForSeconds(interval);
         }
-
+        
     }
    
 }

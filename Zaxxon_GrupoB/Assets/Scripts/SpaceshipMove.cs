@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; //Importante importar esta librería para usar la UI
@@ -10,7 +10,8 @@ public class SpaceshipMove : MonoBehaviour
     public GameObject endCanvas;
     //capturamos el script
     private GameOver gameOver;
-
+    //capturamos prefab explosion
+    public Transform explosionPrefab;
 
     //codigo para la colision. Ojo, el objeto tiene que tener un rigid body y los obstáculos is trigger activo
     [SerializeField] MeshRenderer myMesh;
@@ -24,7 +25,8 @@ public class SpaceshipMove : MonoBehaviour
             speed = 0f;
             //llamamos al canvas a los 2 segundos de colisionar
             Invoke("showCanvas", 2f);
-
+            //explosion
+            Instantiate(explosionPrefab,transform.position,Quaternion.identity);
 
            
         }

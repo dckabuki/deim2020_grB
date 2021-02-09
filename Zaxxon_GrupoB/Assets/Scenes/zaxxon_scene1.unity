@@ -1367,6 +1367,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endCanvas: {fileID: 1527802241}
+  explosionPrefab: {fileID: 4563802948693442, guid: 67a684e320da6e7439421a07e3fa265c,
+    type: 3}
   myMesh: {fileID: 1611825297}
   speed: 1
   TextDistance: {fileID: 585907812}

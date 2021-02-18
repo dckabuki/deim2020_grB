@@ -12,6 +12,13 @@ public class SpaceshipMove : MonoBehaviour
     private GameOver gameOver;
     //capturamos prefab explosion
     public Transform explosionPrefab;
+    //variable para saber si estamos vivos
+    private bool alive = true;
+
+    //capturar sonidos
+    [SerializeField] AudioClip disparo1;
+    [SerializeField] AudioClip motores;
+    [SerializeField] AudioClip boom;
 
     //codigo para la colision. Ojo, el objeto tiene que tener un rigid body y los obstáculos is trigger activo
     [SerializeField] MeshRenderer myMesh;
@@ -20,15 +27,19 @@ public class SpaceshipMove : MonoBehaviour
         if (other.gameObject.tag == "obstacle")
         {
             myMesh.enabled = false;
+            alive = false; 
             //con este segmento paramos la corrutina y la velocidad
             StopCoroutine("Distancia");
             speed = 0f;
             //llamamos al canvas a los 2 segundos de colisionar
             Invoke("showCanvas", 2f);
+            //stop musica
+            audioSource.Stop();
             //explosion
+            audioSource.PlayOneShot(boom,6f);
             Instantiate(explosionPrefab,transform.position,Quaternion.identity);
+            
 
-           
         }
     }
 
@@ -61,6 +72,8 @@ public class SpaceshipMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+    
         speed = 3f;
         //Llamo a la corrutina que hace aumentar la velocidad
         StartCoroutine("Distancia");
@@ -73,6 +86,8 @@ public class SpaceshipMove : MonoBehaviour
         gameOver = GetComponent<GameOver>();
 
 
+        audioSource.PlayOneShot(motores, 1f);
+
     }
 
 
@@ -81,15 +96,18 @@ public class SpaceshipMove : MonoBehaviour
     {
         //Ejecutamos la función propia que permite mover la nave con el joystick
         MoverNave();
+        
+
 
         //Dispara el sonido al pulsar space
         if (Input.GetKeyDown("space"))
         {
-            audioSource.Play();
+            audioSource.PlayOneShot(disparo1);
         }
 
 
     }
+    
 
     //Corrutina que hace cambiar el texto de distancia
     IEnumerator Distancia()
